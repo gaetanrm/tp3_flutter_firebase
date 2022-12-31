@@ -1,0 +1,40 @@
+import 'dart:collection';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/model/question.dart';
+import '../../data/repository/questions_repository.dart';
+
+
+part 'answer_state.dart';
+
+class AnswerCubit extends Cubit<AnswerState> {
+
+  QuestionsRepository questionsRepository = QuestionsRepository();
+
+  AnswerCubit() : super(AnswerState(answered: false, questionIndex: 0, score: 0, quizOver: false));
+
+  void checkAnswer(bool answer) {
+    if (!state.answered && questionsRepository.questions[state.questionIndex].isCorrect == answer) {
+      emit(AnswerState(answered: true, questionIndex: state.questionIndex, score: state.score + 1, quizOver: false));
+    }
+    else {
+      emit(AnswerState(answered: true, questionIndex: state.questionIndex, score: state.score, quizOver: false));
+    }
+  }
+
+  void incrementQuestionIndex() {
+    if (state.answered) {
+      if (state.questionIndex == questionsRepository.questions.length - 1) {
+        emit(AnswerState(answered: false, questionIndex: (state.questionIndex + 1), score: state.score, quizOver: true));
+      }
+      else {
+        emit(AnswerState(answered: false, questionIndex: (state.questionIndex + 1), score: state.score, quizOver: false));
+      }
+    }
+  }
+
+  Question getCurrentQuestion() {
+    return questionsRepository.questions[state.questionIndex];
+  }
+}
