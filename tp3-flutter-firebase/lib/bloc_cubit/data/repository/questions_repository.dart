@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tp3_flutter_firebase/bloc_cubit/data/data_providers/questions_api.dart';
 
 import '../model/question.dart';
@@ -9,20 +10,12 @@ class QuestionsRepository {
 
   final List<Question> _questions = [];
 
-  UnmodifiableListView<Question> get questions => UnmodifiableListView(_questions);
+  UnmodifiableListView<Question> get questions =>
+      UnmodifiableListView(_questions);
 
-  QuestionsRepository(){
+  QuestionsRepository() {
     populateQuestionsCollection();
   }
-/*
-  void fillQuestionList() {
-    questionsAPI.getRawQuestions().then((collection) {
-      for(var doc in collection.docs) {
-        _questions.add(Question.fromMap(doc.data()));
-      }
-    }
-    );
-  }*/
 
   void populateQuestionsCollection() {
     List<Question> starterQuestions = [
@@ -37,7 +30,7 @@ class QuestionsRepository {
           questionText: "2+2 font 5",
           isCorrect: true,
           answerText:
-          "Vrai. En prenant en compte la marge d'erreur, 2+2 font 5.",
+              "Vrai. En prenant en compte la marge d'erreur, 2+2 font 5.",
           thematic: 'Mathématiques'),
       Question(
           urlImage: 'assets/images/eiffel.jpeg',
@@ -56,5 +49,11 @@ class QuestionsRepository {
   void addQuestionsFromDocToRepository(Question question) {
     _questions.add(question);
   }
-}
 
+  void fillRepositoryWithCollection(
+      QuerySnapshot<Map<String, dynamic>>? snapshotData) {
+    for (var doc in snapshotData!.docs) {
+      addQuestionsFromDocToRepository(Question.fromMap(doc.data()));
+    }
+  }
+}

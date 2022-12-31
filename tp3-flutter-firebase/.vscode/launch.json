@@ -1,0 +1,28 @@
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tp3-flutter-firebase",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main/main.dart"
+        },
+        {
+            "name": "tp3-flutter-firebase (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/main/main.dart"
+        },
+        {
+            "name": "tp3-flutter-firebase (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "program": "lib/main/main.dart"
+        }
+    ]
+}

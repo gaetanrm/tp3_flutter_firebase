@@ -27,7 +27,9 @@ class QuizPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
-                      fillQuestion(context, snapshot.data);
+                      BlocProvider.of<AnswerCubit>(context)
+                          .questionsRepository
+                          .fillRepositoryWithCollection(snapshot.data);
                       return BlocBuilder<AnswerCubit, AnswerState>(
                         builder: (context, state) {
                           return _getNextWidget(state);
@@ -36,20 +38,18 @@ class QuizPage extends StatelessWidget {
                     }
                     if (snapshot.hasError) {
                       return const Text("Erreur");
+                    } else {
+                      return const Text("Pas de data");
                     }
-                    else {
-                      return const Text("Pa de data");
-                    }
-                  }
-                  else if (snapshot.connectionState == ConnectionState.waiting) {
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
                     return Column(
                       children: const [
                         Text("Chargement des questions"),
                         CircularProgressIndicator(),
                       ],
                     );
-                  }
-                  else {
+                  } else {
                     return Text("${snapshot.connectionState}");
                   }
                 },
@@ -66,12 +66,6 @@ class QuizPage extends StatelessWidget {
       return const QuestionBox();
     } else {
       return const ResultsBox();
-    }
-  }
-
-  void fillQuestion(BuildContext context, QuerySnapshot<Map<String, dynamic>>? snapshotData) {
-    for (var doc in snapshotData!.docs) {
-      BlocProvider.of<AnswerCubit>(context).questionsRepository.addQuestionsFromDocToRepository(Question.fromMap(doc.data()));
     }
   }
 }
